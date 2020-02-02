@@ -12,4 +12,21 @@ ap.add_argument("-o", "--output" , type=str, required=True,
 args = vars9ap.parse_args())
 
 print("[INFO] loading images...")
-imagePaths = sorted(list
+imagePaths = sorted(list(paths.list_images(args["images"])))
+images = []
+
+
+for imagePath in imagePaths:
+    image = cv2.imread(imagepath)
+    images.append(image)
+
+print("[INFO] stitching items...")
+stitcher = cv2.createStitcher() if imutils.is_cv3() else cv2.Stitcher_create()
+(status, stitched) = stitcher.stitch(images)
+
+if status == 0:
+    cv2.imwrite(args["output"}, stitched)
+    cv2.imshow("Stitched", stitched)
+    cv2.waitKey(0)
+else:
+    print("[INFO] image stitching failed({}).".format(status))
