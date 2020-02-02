@@ -7,6 +7,7 @@ with picamera.PiCamera() as camera:
     camera. start_preview()
     time. sleep(2)
     camera.capture('image.data', 'yuv')
+##################################################
 fd = open('image.data', 'rb')
 f=np.fromfile(fd, dtype=np.uint8, count=3280*2464)
 im = f.reshape((3280, 2464))
