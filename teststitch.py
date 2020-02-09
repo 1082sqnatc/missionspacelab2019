@@ -21,7 +21,7 @@ length = len (imageArray)
 result = cv2.imread(imageArray[0],4)
 #result = numpy.array(pil_image)
 #result = result[:,:,::-1].copy()
-result = imutils.resize(result, width=600)
+result = imutils.resize(result)#, width=600)
 for idx in range(1,length):
     print("========================")
     print("Index: " + str(idx))
@@ -29,7 +29,7 @@ for idx in range(1,length):
     #nextimage = numpy.array(pil_image)
     #nextimage = nextimage[:,:,::-1].copy()
     nextimage = cv2.imread(imageArray[idx],4)
-    nextimage = imutils.resize(nextimage, width=600)
+    nextimage = imutils.resize(nextimage) #, width=600)
     #cv2.imshow("Prev Result", result)
 
     (result, vis, xDrift, yDrift) = stitch([result, nextimage], showMatches=True)
@@ -39,6 +39,7 @@ for idx in range(1,length):
     #time.sleep(20)
     
     #cv2.waitKey(0)
+cv2.imwrite("spikes/stitched.png",result)
 
 #imageA = cv2.imread("/home/pi/Documents/git/missionspacelab2019/spikes/panorama/ISS042-E-104433.jpg")
 #imageB = cv2.imread("/home/pi/Documents/git/missionspacelab2019/spikes/panorama/ISS042-E-104437.jpg")
