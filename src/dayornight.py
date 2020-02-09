@@ -10,7 +10,7 @@ def isDay(imageFile):
     miny = 4000000
     maxy = -1
     
-    print("Size of array (data points): " + str(len(f)))
+  #  print("Size of array (data points): " + str(len(f)))
     
     while count*3*16 < len (f):
         y = f[count*3*16]
@@ -25,15 +25,15 @@ def isDay(imageFile):
     
     avg = lum/count
     
-    print (str(miny)+" is minimum y value")
-    print (str(maxy)+" is maximum y value")
+   # print (str(miny)+" is minimum y value")
+   # print (str(maxy)+" is maximum y value")
     print (str(avg)+" is the average y value")
-    print (str(count)+" is the number of pixels analysed")
+   # print (str(count)+" is the number of pixels analysed")
     
     
     
     
-    if avg < 50:
+    if avg < 50 or avg > 130:
         return False
     
     else:

@@ -8,14 +8,16 @@ from src.dayornight import isDay
 #    print("pic taken")
 # TODO main executable file, pulls in cadets' libraries from lib fold
 def main():
-    files = listdir ("spikes/images")
+    files = listdir ("../Sample_Data/")
     for fname in files:
         print (str(fname + " prosesing file name"))
+        imageFile = "../Sample_Data/" + fname
         t0 = time.time()
-        isDay("spikes/images/"+fname)
+        result = isDay("../Sample_Data/"+fname)
         t1 = time.time()
         t = t1 - t0
-        print (str(t))
+        print (str(t))   
+        print(result)
     # Now process a folder of image...
     
 
