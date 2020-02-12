@@ -35,8 +35,9 @@ def main():
             # covert from pil to cv2
             # TODO fix colour conversion
             result = numpy.array(result)
-            result = result[:,:,::-1].copy()
+            #result = result[:,:,::-1] #.copy() # this is equivalent to cvtCOlor RGB2BGR
             result = cv2.cvtColor(result, cv2.COLOR_RGB2BGR)
+            
             
             # add to panorama
             if lastWasUsable==False :
