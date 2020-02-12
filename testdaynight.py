@@ -10,14 +10,14 @@ from src.dayornight import isDay
 def main():
     files = listdir ("../Sample_Data/")
     for fname in files:
-        print (str(fname + " prosesing file name"))
-        imageFile = "../Sample_Data/" + fname
-        t0 = time.time()
-        result = isDay("../Sample_Data/"+fname)
-        t1 = time.time()
-        t = t1 - t0
-        print (str(t))   
-        print(result)
+        print (str("Processing" + fname)) # Prints the processing notification
+        imageFile = "../Sample_Data/" + fname #Stores the current file name
+       # t0 = time.time()
+        result = isDay(imageFile)
+       # t1 = time.time()
+       # t = t1 - t0
+       # print (str(t))   
+       # print(result)
     # Now process a folder of image...
     
 
