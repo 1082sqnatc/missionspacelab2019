@@ -24,7 +24,7 @@ def main():
         result = Image.open(latestFile)
         
         # Check if usable (not night, and not 'flared')
-        if isDay(latestFile):
+        if isDay(result):
             # If usable, and last was not, increment sequence number, reset image number
             if lastWasUsable==False :
                 sequence = sequence + 1
@@ -33,9 +33,8 @@ def main():
             result = remove_portal(result)
             
             # covert from pil to cv2
-            # TODO fix colour conversion
             result = numpy.array(result)
-            #result = result[:,:,::-1] #.copy() # this is equivalent to cvtCOlor RGB2BGR
+            #result = result[:,:,::-1] #.copy() # this is NOT equivalent to cvtCOlor RGB2BGR
             result = cv2.cvtColor(result, cv2.COLOR_RGB2BGR)
             
             
@@ -43,6 +42,7 @@ def main():
             if lastWasUsable==False :
                 panorama = result
             else :
+                print("Stitching panorama...")
                 (panorama, vis, xDrift, yDrift) = stitch([panorama, result], showMatches=True)
         
             # Save latest panorama
