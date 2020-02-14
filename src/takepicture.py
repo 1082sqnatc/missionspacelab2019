@@ -35,13 +35,16 @@ def get_latlon(cam):
     cam.exif_tags['GPS.GPSLatitude'] = '%d/1,%d/1,%d/10' % (lat_value[0], lat_value[1], lat_value[2]*10)
     print(str(lat_value), str(long_value))
 
-def takePicture(counter):
-        camera = PiCamera()
-        get_latlon(camera)
-        camera.resolution = (2592,1944)
-        camera.start_preview(fullscreen=False, window = (100, 20, 640, 480))
-        sleep(5)
-        camera.capture('/tmp/image-'+ str(counter) + '.jpg', 'yuv')
-        camera.stop_preview()
-        camera.close()
-        sleep(5)
+def takePicture(sequence,counter,dir_path):
+    camera = PiCamera()
+    get_latlon(camera)
+    #camera.resolution = (2592,1944)
+    camera.resolution = (1024,768)
+    camera.start_preview(fullscreen=False, window = (100, 20, 640, 480))
+    sleep(5)
+    filename = dir_path+'image-sequence-'+ str(sequence) + "-image-" + str(counter) + '.jpg'
+    camera.capture(filename)#, 'yuv')
+    camera.stop_preview()
+    camera.close()
+    #sleep(5)
+    return filename
