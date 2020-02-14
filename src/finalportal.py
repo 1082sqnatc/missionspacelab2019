@@ -1,5 +1,6 @@
 from PIL import Image # Imports the Image function from Pillow so that the image can be edited.
 
+# Removes the portal from an ISS image, and sets those pixels as transparent to allow stitching
 def remove_portal(img):
     img = img.convert('RGBA') # Image is converted to support transparrency (alpha)
     datas = img.getdata() # Image data is stored into a variable

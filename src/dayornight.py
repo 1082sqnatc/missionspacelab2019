@@ -4,10 +4,30 @@ import numpy
 import time
 import cv2
 
+# Calculates the average brightness of a 200x200 image, sampling every 10 pixels for speed
+def calcBrightness(img):
+    x = 0
+    y = 0
+    c_brightness = 0;
+    count = 0
+    while x < 200 and y < 200:
+        pixelBGR = img.getpixel((x,y))
+        B, G, R = pixelBGR
+        c_brightness = (c_brightness + ((B+G+R) / 3))
+        if x == 199:
+            y = y + 10
+            x = 0
+        else:
+            x = x + 10
+        count = count + 1
+    print("total brightness: " + str(c_brightness) + ", sample count: " + str(count))
+    return c_brightness / count
 
-def isDay(imageFile):
-    img = open(imageFile, 'rb')
-    with Image.open(img) as image:
+# Detects a good day vs night image of a portal
+# Eliminates Night, and sunrise/sunset 'flared' images
+def isDay(image):
+    #img = open(imageFile, 'rb')
+    #with Image.open(img) as image:
         width, height = image.size # Determins width and height of image and stores it
         print("Width =", width, "\n Height =", height) # Prints width and height
         total_pixels = width * height # Calculates the total number of pixels in the image
@@ -32,34 +52,30 @@ def isDay(imageFile):
         print("pixels in bl: " + str(Bottom_Left.size))
         print("pixels in br: " + str(Bottom_Right.size))
         print("pixels in ct: " + str(Center_Data.size))
-        Top_Left = numpy.array(Top_Left)
-        Top_Right = numpy.array(Top_Right)
-        Bottom_Left = numpy.array(Bottom_Left)
-        Bottom_Right = numpy.array(Bottom_Right)
-        Center_Data =  numpy.array(Center_Data)
-        Top_Left = cv2.cvtColor(Top_Left, cv2.COLOR_RGB2BGR)
-        Top_Right = cv2.cvtColor(Top_Right, cv2.COLOR_RGB2BGR)
-        Bottom_Left = cv2.cvtColor(Bottom_Left, cv2.COLOR_RGB2BGR)
-        Bottom_Right = cv2.cvtColor(Bottom_Right, cv2.COLOR_RGB2BGR)
-        Center_Data = cv2.cvtColor(Center_Data, cv2.COLOR_RGB2BGR)
+        #Top_Left = numpy.array(Top_Left)
+        #Top_Right = numpy.array(Top_Right)
+        #Bottom_Left = numpy.array(Bottom_Left)
+        #Bottom_Right = numpy.array(Bottom_Right)
+        #Center_Data =  numpy.array(Center_Data)
+        #Top_Left = cv2.cvtColor(Top_Left, cv2.COLOR_RGB2BGR)
+        #Top_Right = cv2.cvtColor(Top_Right, cv2.COLOR_RGB2BGR)
+        #Bottom_Left = cv2.cvtColor(Bottom_Left, cv2.COLOR_RGB2BGR)
+        #Bottom_Right = cv2.cvtColor(Bottom_Right, cv2.COLOR_RGB2BGR)
+        #Center_Data = cv2.cvtColor(Center_Data, cv2.COLOR_RGB2BGR)
 
 
-        x = 0
-        y = 0
-        while x <= 200:
-            pixelBGR = Center_Data.getpixel((x,y))
-            B, G, R = pixelBGR
-            c_brightness = (c_brightness + ((B+G+R) / 3))/2
-            if x == 200:
-                y = y + 1
-                x = 0
-            else:
-                x = x + 1
-                
+        c_brightness = calcBrightness(Center_Data)
+        tl_brightness = calcBrightness(Top_Left)
+        tr_brightness = calcBrightness(Top_Right)
+        bl_brightness = calcBrightness(Bottom_Left)
+        br_brightness = calcBrightness(Bottom_Right)
 
         avg = (tl_brightness + tr_brightness + bl_brightness + br_brightness) / 4
-        range = Centr - avg
-        if range > 100:
+        rg = c_brightness - avg
+        print("Centre vs border diff: " + str(rg))
+        
+        # Our testing shows a rg of 40 is a good analog for day vs night/flared pictures
+        if rg > 40:
             return True
-        elif range < 100:
+        else:
             return False

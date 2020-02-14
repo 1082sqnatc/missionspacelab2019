@@ -3,12 +3,15 @@ import imutils
 import cv2
 import math
 
+# Custom absolute function
 def myfabs(x):
     if x < 0:
         return x*-1
     else :
         return x
 
+# Heavily customised CV2 based stitcher algorithm, tuned to suit images with transparency
+# Will also cut the resultant 'black' border from the joined image
 def stitch(images, ratio=0.75, reprojThresh=4.0,
         showMatches=False):
     (imageB, imageA) = images
@@ -88,6 +91,7 @@ def stitch(images, ratio=0.75, reprojThresh=4.0,
         return (result, vis, xDrift, yDrift)
     return result
 
+# Feature detection in the image
 def detectAndDescribe(image):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     descriptor = cv2.ORB_create(nfeatures=1500)
@@ -95,6 +99,7 @@ def detectAndDescribe(image):
     kps = np.float32([kp.pt for kp in kps])
     return (kps, features)
 
+# Matching keypoints between two images
 def matchKeypoints(kpsA, kpsB, featuresA, featuresB,
         ratio, reprojThresh):
     matcher = cv2.DescriptorMatcher_create("BruteForce")
@@ -111,6 +116,7 @@ def matchKeypoints(kpsA, kpsB, featuresA, featuresB,
         return (matches, H, status)
     return None
 
+# Draw the matches on an image (for testing)
 def drawMatches(imageA, imageB, kpsA, kpsB, matches, status):
     (hA, wA) = imageA.shape[:2]
     (hB, wB) = imageB.shape[:2]
